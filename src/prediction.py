@@ -1,10 +1,11 @@
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
+import tensorflow as tf
 import numpy as np
 import os
 
 
-def generate_foodlist(path: str):
+def generate_foodlist():
     food_list = [
         "apple_pie",
         "baby_back_ribs",
@@ -113,13 +114,19 @@ def generate_foodlist(path: str):
 
 
 # model location
-model_location = os.path.abspath(os.path.join("src", "models", "model_epoch_3.hdf5"))
+model_location = os.path.abspath(os.path.join("src", "models", "model_epoch_4.hdf5"))
 print(f"\n\n\n Model location {model_location}\n\n\n")
 # loading the model
 model = load_model(model_location, compile=False)
 # generating the foodlist from the directory
-food_list = generate_foodlist("food-101/images")
+food_list = generate_foodlist()
 food_list.sort()
+
+
+def get_top_k_predictions(num_predictions: int, predictions):
+    top_k_values, top_k_indices = tf.nn.top_k(predictions, k=num_predictions)
+    top_k_food_items = [food_list[index] for index in top_k_indices[0]]
+    return top_k_food_items
 
 
 def preprocess_image(input_image: str):
@@ -133,8 +140,10 @@ def preprocess_image(input_image: str):
 def predict_food_item(input_image_location: str):
     preprocessed_image = preprocess_image(input_image_location)
     prediction = model.predict(preprocessed_image)
-    index = np.argmax(prediction)
-    return food_list[index]
+    k_food_predictions = get_top_k_predictions(5, prediction)
+    print(f"This is the prediction {get_top_k_predictions(5, prediction)}")
+    # index = np.argmax(prediction)
+    return k_food_predictions
 
 
 def remove_file(input_image_location: str):
