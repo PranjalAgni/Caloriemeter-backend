@@ -114,7 +114,7 @@ def generate_foodlist():
 
 
 # model location
-model_location = os.path.abspath(os.path.join("src", "models", "model_epoch_4.hdf5"))
+model_location = os.path.abspath(os.path.join("src", "models", "model_epoch_8.hdf5"))
 print(f"\n\n\n Model location {model_location}\n\n\n")
 # loading the model
 model = load_model(model_location, compile=False)
