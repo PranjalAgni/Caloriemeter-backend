@@ -12,7 +12,7 @@ formData.append(
 
 let url = 'https://www.caloriemama.ai/api/food_recognition_proxy';
 
-let options = {
+let option = {
   method: 'POST',
   headers: {
     'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001',
@@ -22,7 +22,7 @@ let options = {
 
 options.body = formData;
 
-fetch(url, options)
+fetch(url, option)
   .then((res) => res.json())
   .then((json) => console.log(json))
   .catch((err) => console.error('error:' + err));
